@@ -2,7 +2,7 @@
   <tr>
   <td width="50%">
 
-&nbsp; <br> [![Spotify](https://spotifymd.notcoderguy.com/api/spotify?background_color=0d1117&border_color=ffffff)](https://open.spotify.com/user/notcoderguy)
+&nbsp; <br> [![Spotify](https://spotifymd.notcoderguy.com/api/spotify?background_color=0d1117&border_color=ffffff)](https://open.spotify.com/user/b2almywzip3wagvhei9q0b9u9)
 
   </td>
   <td width="50%">
