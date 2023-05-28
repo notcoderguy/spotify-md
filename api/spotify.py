@@ -148,7 +148,7 @@ def catch_all(path):
     background_color = request.args.get('background_color') or "181414"
     border_color = request.args.get('border_color') or "181414"
 
-    if not background_color and not border_color:
+    if not request.args.get('background_color') and not request.args.get('border_color'):
         data = nowPlaying()
         return jsonify({
             "song": data["song"],
