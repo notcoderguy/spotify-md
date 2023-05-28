@@ -141,21 +141,19 @@ def makeSVG(data, background_color, border_color):
 
     return render_template(getTemplate(), **dataDict)
 
-
-@app.route("/now-playing")
-def now_playing():
-    data = nowPlaying()
-    return {
-        "song": data["song"],
-        "url": data["url"]
-    }
-
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 @app.route('/with_parameters')
 def catch_all(path):
     background_color = request.args.get('background_color') or "181414"
     border_color = request.args.get('border_color') or "181414"
+
+    if not background_color and not border_color:
+    data = nowPlaying()
+    return jsonify({
+        "song": data["song"],
+        "url": data["url"]
+    })
 
     data = nowPlaying()
     svg = makeSVG(data, background_color, border_color)
