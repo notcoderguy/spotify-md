@@ -150,10 +150,10 @@ def catch_all(path):
 
     if not request.args.get('background_color') and not request.args.get('border_color'):
         data = nowPlaying()
-        return jsonify({
+        return {
             "song": data["song"],
             "url": data["url"]
-        })
+        }
 
     data = nowPlaying()
     svg = makeSVG(data, background_color, border_color)
