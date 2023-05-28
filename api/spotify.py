@@ -142,6 +142,14 @@ def makeSVG(data, background_color, border_color):
     return render_template(getTemplate(), **dataDict)
 
 
+@app.route("/now-playing")
+def now_playing():
+    data = nowPlaying()
+    return {
+        "song": data["song"],
+        "url": data["url"]
+    }
+
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 @app.route('/with_parameters')
@@ -157,13 +165,6 @@ def catch_all(path):
 
     return resp
 
-@app.route("/now-playing")
-def now_playing():
-    data = nowPlaying()
-    return {
-        "song": data["song"],
-        "url": data["url"]
-    }
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True, port=os.getenv("PORT") or 5000)
