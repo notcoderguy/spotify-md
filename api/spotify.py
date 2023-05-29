@@ -5,7 +5,8 @@ import requests
 
 from base64 import b64encode
 from dotenv import load_dotenv, find_dotenv
-from flask import Flask, Response, jsonify, render_template, templating, request, CORS
+from flask import Flask, Response, jsonify, render_template, templating, request
+from flask_cors import CORS, cross_origin
 
 load_dotenv(find_dotenv())
 
