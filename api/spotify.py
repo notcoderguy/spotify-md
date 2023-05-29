@@ -5,7 +5,7 @@ import requests
 
 from base64 import b64encode
 from dotenv import load_dotenv, find_dotenv
-from flask import Flask, Response, jsonify, render_template, templating, request
+from flask import Flask, Response, jsonify, render_template, templating, request, CORS
 
 load_dotenv(find_dotenv())
 
@@ -26,6 +26,7 @@ RECENTLY_PLAYING_URL = (
 )
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": ["https://notcoderguy.com", "http://localhost:3000"]}})
 
 
 def getAuth():
