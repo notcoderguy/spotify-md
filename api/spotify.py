@@ -73,9 +73,7 @@ def makeSVG(data, background_color, border_color):
         #contentBar = "" #Shows/Hides the EQ bar if no song is currently playing
         currentStatus = "Recently played:"
         recentPlays = data
-        recentPlaysLength = len(recentPlays["items"])
-        itemIndex = random.randint(0, recentPlaysLength - 1)
-        item = recentPlays["items"][itemIndex]["track"]
+        item = recentPlays["item"]
     else:
         item = data["item"]
         currentStatus = "Vibing to:"
