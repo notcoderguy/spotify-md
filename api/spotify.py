@@ -13,7 +13,7 @@ PLACEHOLDER_URL = "https://source.unsplash.com/random/300x300/?dark,asthetic"
 
 FALLBACK_THEME = "spotify.html.j2"
 
-NOW_PLAYING_URL = "https://api.spotifyx.notcoderguy.com/"
+NOW_PLAYING_URL = "https://api-spotifyx.notcoderguy.com/"
 
 app = Flask(__name__)
 
