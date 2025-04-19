@@ -46,9 +46,9 @@ def getTemplate(theme_name=None):
     try:
         with open("api/templates.json", "r") as file:
             templates_config = json.loads(file.read())
-            
+
         available_templates = templates_config.get("templates", {})
-        
+
         if theme_name and theme_name in available_templates:
             return available_templates[theme_name]
         else:
@@ -60,7 +60,7 @@ def getTemplate(theme_name=None):
                 # Ultimate fallback
                 print(f"Warning: Theme '{theme_name or current_theme_name}' not found or invalid. Falling back to {FALLBACK_THEME}")
                 return FALLBACK_THEME
-                
+
     except FileNotFoundError:
         print(f"Error: templates.json not found. Falling back to {FALLBACK_THEME}")
         return FALLBACK_THEME
@@ -82,47 +82,37 @@ def loadImageB64(url):
 
 
 def makeSVG(data, background_color, border_color, theme_name):
-    # Removed bar generation
-    # barCount = 84
-    # contentBar = "".join(["<div class='bar'></div>" for _ in range(barCount)])
-    # barCSS = barGen(barCount)
-
+    # Determine status keyword
     if not data: # Handle case where data fetching failed
         print("No data received from Spotify API.")
-        # Render a fallback SVG or return an error response
-        # For now, let's try to proceed with placeholder data, but this should be improved
         item = None
-        currentStatus = "Offline"
+        currentStatus = "offline" # Use keyword
         image = None
-        songPalette = None # No colors if no data
+        songPalette = None
         artistName = "N/A"
         songName = "N/A"
         songURI = "#"
         artistURI = "#"
-
-    elif "is_playing" not in data:
-        currentStatus = "Recently played:"
-        # Assuming 'data' contains recent plays structure if not 'is_playing'
+    elif not data.get("is_playing", False): # Check if recently played
+        currentStatus = "recent" # Use keyword
         item = data.get("item") if isinstance(data.get("item"), dict) else None
         if not item:
              print("Error: 'item' not found or invalid in recently played data.")
-             # Handle missing item gracefully
+             # Keep status "recent" but details N/A
              item = None
-             currentStatus = "Offline" # Or another appropriate status
              image = None
              songPalette = None
              artistName = "N/A"
              songName = "N/A"
              songURI = "#"
              artistURI = "#"
-
-    else:
+    else: # Currently playing
         item = data.get("item") if isinstance(data.get("item"), dict) else None
         if not item:
              print("Error: 'item' not found or invalid in currently playing data.")
-             # Handle missing item gracefully
+             # Treat as offline if item is missing even if is_playing is true
              item = None
-             currentStatus = "Offline" # Or another appropriate status
+             currentStatus = "offline" # Use keyword
              image = None
              songPalette = None
              artistName = "N/A"
@@ -130,7 +120,7 @@ def makeSVG(data, background_color, border_color, theme_name):
              songURI = "#"
              artistURI = "#"
         else:
-            currentStatus = "Vibing to:"
+            currentStatus = "playing" # Use keyword
 
 
     # Image and Color Extraction Logic (handles item being None)
@@ -146,16 +136,15 @@ def makeSVG(data, background_color, border_color, theme_name):
 
     # Handle potential failure of loadImageB64 or extract_colors
     if image is None:
-        # Maybe use a default inline SVG or a very simple b64 placeholder
         print("Warning: Failed to load image (main or placeholder).")
         image = "" # Or some default
     if songPalette is None:
         print("Warning: Failed to extract colors. Using default.")
-        # Provide default colors
-        songPalette = [(50, 50, 50), (100, 100, 100)]
+        songPalette = [(50, 50, 50), (100, 100, 100)] # Default colors
 
 
     # Extract other details safely, providing defaults if item is None
+    # Use & for escaping ampersands in XML/HTML context
     artistName = item["artists"][0]["name"].replace("&", "&") if item and item.get("artists") else "Unknown Artist"
     songName = item["name"].replace("&", "&") if item and item.get("name") else "Unknown Song"
     songURI = item["external_urls"]["spotify"] if item and item.get("external_urls") else "#"
@@ -163,17 +152,14 @@ def makeSVG(data, background_color, border_color, theme_name):
 
 
     dataDict = {
-        # "contentBar": contentBar, # Removed
-        # "barCSS": barCSS, # Removed
         "artistName": artistName,
         "songName": songName,
         "songURI": songURI,
         "artistURI": artistURI,
         "image": image,
-        "status": currentStatus,
+        "status": currentStatus, # Pass the keyword
         "background_color": background_color,
         "border_color": border_color,
-        # "barPalette": barPalette, # Removed
         "songPalette": songPalette # Keep songPalette
     }
 

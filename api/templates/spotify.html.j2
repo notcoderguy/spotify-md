@@ -14,8 +14,12 @@
 
                 .art {
                     width: 27%;
-                    float: left;
-                    margin-left: -5px;
+                    /* float: left; Removed float */
+                    margin-left: 5px; /* Adjusted margin */
+                    position: relative; /* Make this the reference for absolute positioning */
+                    display: flex; /* Use flex to center image */
+                    justify-content: center;
+                    align-items: center;
                 }
 
                 .content {
@@ -53,15 +57,37 @@
                 }
 
                 .status {
-                    width: 330px;
-                    color: #737373; /* Lighter grey for status */
-                    font-size: 18px;
-                    margin-bottom: 5px; /* Space below status */
-                    text-align: center;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
+                    position: absolute;
+                    top: -2px; /* Position near top-right of art */
+                    right: 0px; /* Position near top-right of art */
+                    /* width: auto; Removed fixed width */
+                    font-size: 10px; /* Smaller font for offline text if needed */
+                    height: 12px; /* Adjust height */
+                    /* margin-bottom: 0; Removed margin */
+                    /* text-align: right; Align text right if shown */
+                    display: flex;
+                    align-items: center;
                     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                    color: #737373; /* Default color for text */
+                    background-color: rgba(255, 255, 255, 0.7); /* Slight background for visibility */
+                    padding: 1px 3px;
+                    border-radius: 3px;
+                    z-index: 1; /* Ensure it's above the image */
+                }
+
+                .status-dot {
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    display: inline-block;
+                }
+
+                .status-dot-playing {
+                    background-color: #1DB954; /* Spotify green */
+                }
+
+                .status-dot-recent {
+                    background-color: #737373; /* Gray */
                 }
 
                 .cover {
@@ -83,14 +109,24 @@
             </style>
 
             <div class="main">
-                <a class="art" href="{}" target="_blank">
-                    <center>
+                <div class="art">
+                     <a href="{}" target="_blank"> <!-- Link covers image -->
                         <img src="data:image/png;base64, {{image}}" class="cover" />
-                    </center>
-                </a>
+                     </a>
+                     <!-- Status indicator positioned relative to .art -->
+                     <div class="status">
+                        {% if status == 'playing' %}
+                            <span class="status-dot status-dot-playing"></span>
+                        {% elif status == 'recent' %}
+                            <span class="status-dot status-dot-recent"></span>
+                        {% elif status == 'offline' %}
+                            Offline
+                        {% endif %}
+                    </div>
+                </div>
 
                 <div class="content">
-                    <div class="status">{{status}}</div>
+                    <!-- Status div removed from here -->
                     <a href="{{songURI}}" target="_blank">
                         <div class="song">{{songName}}</div>
                     </a>
