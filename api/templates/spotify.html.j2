@@ -52,6 +52,18 @@
                     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
                 }
 
+                .status {
+                    width: 330px;
+                    color: #737373; /* Lighter grey for status */
+                    font-size: 18px;
+                    margin-bottom: 5px; /* Space below status */
+                    text-align: center;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                }
+
                 .cover {
                     width: 100px;
                     height: 100px;
@@ -78,6 +90,7 @@
                 </a>
 
                 <div class="content">
+                    <div class="status">{{status}}</div>
                     <a href="{{songURI}}" target="_blank">
                         <div class="song">{{songName}}</div>
                     </a>
