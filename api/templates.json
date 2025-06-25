@@ -1,6 +1,10 @@
 {
-    "current-theme": "dark",
+    "current-theme": "mocha",
     "templates": {
+        "latte": "catppuccin-latte.html.j2",
+        "frappe": "catppuccin-frappe.html.j2", 
+        "macchiato": "catppuccin-macchiato.html.j2",
+        "mocha": "catppuccin-mocha.html.j2",
         "light": "spotify.html.j2",
         "dark": "spotify-dark.html.j2"
     }

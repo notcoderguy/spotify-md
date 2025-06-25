@@ -10,7 +10,7 @@ from flask import Flask, Response, render_template, request
 
 PLACEHOLDER_URL = "https://picsum.photos/300/300" # Changed size for consistency
 
-FALLBACK_THEME = "spotify.html.j2"
+FALLBACK_THEME = "catppuccin-mocha.html.j2"
 
 NOW_PLAYING_URL = "https://api-spotifyx.notcoderguy.com/"
 
