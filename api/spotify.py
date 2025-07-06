@@ -12,7 +12,7 @@ PLACEHOLDER_URL = "https://picsum.photos/300/300" # Changed size for consistency
 
 FALLBACK_THEME = "catppuccin-mocha.html.j2"
 
-NOW_PLAYING_URL = "https://api-spotifyx.notcoderguy.com/"
+NOW_PLAYING_URL = "https://spotifyx.notcoderguy.com/api/now-playing"
 
 app = Flask(__name__)
 
@@ -93,34 +93,41 @@ def makeSVG(data, background_color, border_color, theme_name):
         songName = "N/A"
         songURI = "#"
         artistURI = "#"
-    elif not data.get("is_playing", False): # Check if recently played
+    elif "items" in data: # New format for recently played
         currentStatus = "recent" # Use keyword
-        item = data.get("item") if isinstance(data.get("item"), dict) else None
-        if not item:
-             print("Error: 'item' not found or invalid in recently played data.")
-             # Keep status "recent" but details N/A
-             item = None
-             image = None
-             songPalette = None
-             artistName = "N/A"
-             songName = "N/A"
-             songURI = "#"
-             artistURI = "#"
-    else: # Currently playing
-        item = data.get("item") if isinstance(data.get("item"), dict) else None
-        if not item:
-             print("Error: 'item' not found or invalid in currently playing data.")
-             # Treat as offline if item is missing even if is_playing is true
-             item = None
-             currentStatus = "offline" # Use keyword
-             image = None
-             songPalette = None
-             artistName = "N/A"
-             songName = "N/A"
-             songURI = "#"
-             artistURI = "#"
+        if data["items"] and isinstance(data["items"], list) and len(data["items"]) > 0:
+            item = data["items"][0].get("track")
+            if not isinstance(item, dict):
+                print("Error: 'track' not found or invalid in recently played data.")
+                item = None
         else:
+            item = None
+        
+        if not item:
+            print("Error: No valid track data in recently played items.")
+            image = None
+            songPalette = None
+            artistName = "N/A"
+            songName = "N/A"
+            songURI = "#"
+            artistURI = "#"
+    else: # Original format (currently playing or offline)
+        if not data.get("is_playing", False): # Recently played in old format
+            currentStatus = "recent" # Use keyword
+            item = data.get("item") if isinstance(data.get("item"), dict) else None
+        else: # Currently playing
             currentStatus = "playing" # Use keyword
+            item = data.get("item") if isinstance(data.get("item"), dict) else None
+
+        if not item:
+            print("Error: 'item' not found or invalid in data.")
+            currentStatus = "offline" if currentStatus != "recent" else currentStatus
+            image = None
+            songPalette = None
+            artistName = "N/A"
+            songName = "N/A"
+            songURI = "#"
+            artistURI = "#"
 
 
     # Image and Color Extraction Logic (handles item being None)
